@@ -14,4 +14,16 @@ router.get('/',async (req,res)=>{
     }
 })
 
+router.get('/todo',async(req,res)=>{
+    const filepath = path.join(__dirname,'todo.json')
+    try{
+        const todos = await fs.readFile(filepath)
+        const todoArr = JSON.parse(todos.toString())
+        console.log(todoArr[1].title)
+        res.send(todoArr)
+    }catch(error){
+        res.send(error)
+    }
+})
+
 export default router
