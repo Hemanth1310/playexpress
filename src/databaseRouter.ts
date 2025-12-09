@@ -31,4 +31,42 @@ router.get('/users',async(req,res)=>{
     }
 })
 
+router.patch('/modifier',async (req,res)=>{
+    const email : string = req.body.email
+    const {name} = req.body as Prisma.UserUpdateInput
+
+    try{
+        const updatedUser :User = await prisma.user.update({
+            where:{
+             email:email
+            },
+             data:{
+                name:name
+             }
+
+        })
+        res.json({
+            message:"User updated",
+            data:updatedUser
+        })
+    }catch(error){
+        res.status(401).send('invalid request')
+    }
+})
+
+router.delete('/delete/:id',async(req,res)=>{
+    const id:number  = Number(req.params.id)
+    try{
+        const deletedUser = await prisma.user.delete({
+            where:{
+                id:id
+            }
+        })
+
+        res.send(deletedUser)
+    }catch(error){
+        res.send(error)
+    }
+})
+
 export default router
